@@ -1,6 +1,7 @@
 from itertools import cycle
 from random import randrange
 from tkinter import Canvas, Tk, messagebox, font, simpledialog
+import csv
 
 canvas_width = 800
 canvas_height = 400
@@ -134,6 +135,13 @@ def egg_dropped(egg):
                 root.after_cancel(catch_timer_id)
             
             messagebox.showinfo("Game Over!", f"Final Score: {score}")
+            
+            #STORING SCORES TEMPORARILY
+            f = open("temp_egg_scores.csv", "w", newline='')
+            w = csv.writer(f)
+            w.writerow([score])
+            f.close()
+
             root.destroy()
     except:
         # If canvas is already destroyed, just proceed with cleanup

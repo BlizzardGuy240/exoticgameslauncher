@@ -1,5 +1,6 @@
 import pygame
 import random
+import csv
 
 
 pygame.init()
@@ -13,7 +14,7 @@ def restart():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))   
     caption = pygame.display.set_caption("Dino Game")
     clock = pygame.time.Clock()
-    dino_img = pygame.image.load("dino png.png").convert_alpha()
+    dino_img = pygame.image.load("dino_png.png").convert_alpha()
     obs_img = pygame.image.load("cactus.png").convert_alpha()
     cloud_img = pygame.image.load("cloud.png").convert_alpha()
     
@@ -116,6 +117,12 @@ def restart():
             replay = font.render(f"Press SPACE to RESTART", True, GREY)
             screen.blit(end, (WIDTH - 450, 20))
             screen.blit(replay, (WIDTH - 525, 40))
+
+            #STORING SCORE TEMPORARILY
+            f = open("temp_dino_scores.csv","a", newline='')
+            w = csv.writer(f)
+            w.writerow([int(score)])
+            f.close()
 
             pygame.display.flip()
 
