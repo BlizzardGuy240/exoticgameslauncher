@@ -1,13 +1,15 @@
 import random
 import tkinter as tk
 
+path = "/assets/hangman"
+
 root = tk.Tk()
 root.title("Hangman")
 root.geometry('615x365')
-ez = ["0.png","1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png","10.png","11.png","12.png"]
-mid = ["0.png","2.png","4.png","5.png","6.png","8.png","10.png","12.png"]
-har = ["0.png","4.png","6.png","10.png","12.png"]
-pics = ['0.png']
+ez = [f"{path}0.png",f"{path}1.png",f"{path}2.png",f"{path}3.png",f"{path}4.png",f"{path}5.png",f"{path}6.png",f"{path}7.png",f"{path}8.png",f"{path}9.png",f"{path}10.png",f"{path}11.png",f"{path}12.png"]
+mid = [f"{path}0.png",f"{path}2.png",f"{path}4.png",f"{path}5.png",f"{path}6.png",f"{path}8.png",f"{path}10.png",f"{path}12.png"]
+har = [f"{path}0.png",f"{path}4.png",f"{path}6.png",f"{path}10.png",f"{path}12.png"]
+pics = [f'{path}0.png']
 words=["COFFEE","LABURNUM","RHYTHM","CATALYST","LYNX"]
 word = list(words[random.randrange(0,len(words))])
 display = list(len(word)*'_')
@@ -85,7 +87,7 @@ def press():
 
     del_inp()
 
-    if pics[mis]== '12.png':
+    if pics[mis]== f'{path}12.png':
         lose = tk.Label(root, text = f'You lose :( \n The word was {wor()}', font=('Arial',17))
         lose.place(x=25,y=200)
         inp.config(state='disabled')
@@ -93,7 +95,7 @@ def press():
         win = tk.Label(root, text = 'You win!!!', font=('Arial',17))
         win.place(x=25,y=200)
         inp.config(state='disabled')
-        image = tk.PhotoImage(file = 'win.png')
+        image = tk.PhotoImage(file = f'{path}win.png')
         im = tk.Label(root, image=image )
         im.place(x=250,y=0)
 

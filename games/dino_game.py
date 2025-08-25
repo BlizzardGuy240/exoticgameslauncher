@@ -14,9 +14,9 @@ def restart():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))   
     caption = pygame.display.set_caption("Dino Game")
     clock = pygame.time.Clock()
-    dino_img = pygame.image.load("dino_png.png").convert_alpha()
-    obs_img = pygame.image.load("cactus.png").convert_alpha()
-    cloud_img = pygame.image.load("cloud.png").convert_alpha()
+    dino_img = pygame.image.load("/assets/dino_game/dino_png.png").convert_alpha()
+    obs_img = pygame.image.load("/assets/dino_game/cactus.png").convert_alpha()
+    cloud_img = pygame.image.load("/assets/dino_game/cloud.png").convert_alpha()
     
 
     # Colors and constants
@@ -55,7 +55,7 @@ def restart():
     # Score and Font rendering
     score = 0
     global font
-    font = pygame.font.Font("PressStart2P.ttf", 12) # font properties
+    font = pygame.font.Font("/assets/dino_game/PressStart2P.ttf", 12) # font properties
  
     pygame.display.flip()
 
