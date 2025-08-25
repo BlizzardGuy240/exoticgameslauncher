@@ -80,7 +80,7 @@ if __name__ == "__main__":
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame1, text="PLAY", command=play)
 
-            image_open = Image.open("dino_game3.png")
+            image_open = Image.open("/assets/launcher/dino_game3.png")
             image = ImageTk.PhotoImage(image_open)
             image_label = tk.Label(frame1, image=image)
 
@@ -114,7 +114,7 @@ if __name__ == "__main__":
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame2, text="PLAY", command=play)
 
-            image_open = Image.open("dino_game3.png")
+            image_open = Image.open("/assets/launcher/dino_game3.png")
             image = ImageTk.PhotoImage(image_open)
             image_label = tk.Label(frame2, image=image)
 
@@ -141,7 +141,7 @@ if __name__ == "__main__":
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame3, text="PLAY", command=play)
 
-            image_open = Image.open("hangman_image.png")
+            image_open = Image.open("/assets/launcher/hangman_image.png")
             image = ImageTk.PhotoImage(image_open.resize((300,200)))
             image_label = tk.Label(frame3, image=image)
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame4, text="PLAY", command=play)
 
-            image_open = Image.open("hangman_image.png")
+            image_open = Image.open("/assets/launcher/hangman_image.png")
             image = ImageTk.PhotoImage(image_open.resize((300,200)))
             image_label = tk.Label(frame4, image=image)
 
@@ -184,26 +184,26 @@ if __name__ == "__main__":
             image_label.pack(expand=False, fill="none")
             play_btn.pack(expand=False, pady=5, fill="none")
 
-        egg_img = ImageTk.PhotoImage(Image.open("egg_catcher.png").resize((110, 120)))
+        egg_img = ImageTk.PhotoImage(Image.open("/assets/launcher/egg_catcher.png").resize((110, 120)))
         egg_btn = tk.Button(side, image=egg_img, bg = "#61451A", borderwidth=5, command=egg_click)
         egg_btn.place(relx=0.035, rely=0.015, relwidth=0.4, relheight=0.4)
 
-        dino_img = ImageTk.PhotoImage(Image.open("dino2.png").resize((110, 120)))
+        dino_img = ImageTk.PhotoImage(Image.open("/assets/launcher/dino2.png").resize((110, 120)))
         dino_btn = tk.Button(side, image=dino_img, bg = "#623456", borderwidth=5, command=dino_click)
         dino_btn.place(relx=0.56, rely=0.015, relwidth=0.4, relheight=0.4)
 
-        han_img = ImageTk.PhotoImage(Image.open("hangman.png").resize((110, 120)))
+        han_img = ImageTk.PhotoImage(Image.open("/assets/launcher/hangman.png").resize((110, 120)))
         han_btn = tk.Button(side, image=han_img, bg = "#EFDECD", borderwidth=5, command=hangman_click)
         han_btn.place(relx=0.035, rely=0.48, relwidth=0.4, relheight=0.4)
 
-        reat_img = ImageTk.PhotoImage(Image.open("react.png").resize((110, 120)))
+        reat_img = ImageTk.PhotoImage(Image.open("/assets/launcher/react.png").resize((110, 120)))
         reat_btn = tk.Button(side, image=reat_img, bg = "#FFFF4D", borderwidth=5, command=reaction_click)
         reat_btn.place(relx=.56, rely=0.48, relwidth=0.4, relheight=0.4)
         
         def settings():
             pass
         
-        settings_img = ImageTk.PhotoImage(Image.open("settings.png"))
+        settings_img = ImageTk.PhotoImage(Image.open("/assets/launcher/settings.png"))
 
         settings = tk.Button(launcher, image=settings_img)
         settings.place(relx=0.96, rely=0.0075)
