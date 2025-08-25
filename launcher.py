@@ -9,11 +9,17 @@ from tkinter import font
 from PIL import ImageTk, Image
 import pyglet
 
+from game.dino_game import run
+from game.egg_catcher import run
+from game.hangman import run
+from game.reaction_test import run
+
 try:
     with open("sensitive.dat", 'rb'):
         pass
 except FileNotFoundError:
     sp.run(['python', 'defaulter.py'])
+
 
 if __name__ == "__main__":
     def launcher():
@@ -100,7 +106,7 @@ if __name__ == "__main__":
                 os.remove("./dino_game/temp_dino_scores.csv")
 
             def play():
-                sp.run(["python", "./dino_game/dino_game.py"])
+                game.dino_game.run()
                 store_score()
 
             title = tk.Label(frame2, text="DINO GAME", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
