@@ -82,5 +82,5 @@ def run():
                 screen.blit(time, (175, 580))
                 pygame.display.update()
                 turn -= 1
-                l2 += ["{:.2f}".format(a*1000)]
+                l2 += ["{:.2f}".format(a*1000)+"ms"]
                 score(l2)

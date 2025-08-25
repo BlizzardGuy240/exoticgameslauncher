@@ -60,6 +60,15 @@ def run():
     
         pygame.display.flip()
 
+        def store_score(list):
+            f = open("temp_dino_scores.csv","w", newline='')
+            w = csv.writer(f)
+            w.writerow(list)
+            del l
+            f.close()
+
+        l=[]
+
         global running
         running = True
         while obs_speed == 6:
@@ -120,10 +129,7 @@ def run():
                 screen.blit(replay, (WIDTH - 525, 40))
 
                 #STORING SCORE TEMPORARILY
-                f = open("temp_dino_scores.csv","a", newline='')
-                w = csv.writer(f)
-                w.writerow([int(score)])
-                f.close()
+                l.append(int(score))
 
                 pygame.display.flip()
 
@@ -139,7 +145,8 @@ def run():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                        restart()
+                    store_score(l)
+                    restart()
                     
 
 

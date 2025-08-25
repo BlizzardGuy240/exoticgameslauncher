@@ -63,16 +63,16 @@ if __name__ == "__main__":
 
             def store_score():
                 f = open("./egg_catcher/egg_catcher_scores.csv", "a", newline='')
-                g = open("./egg_catcher/temp_egg_scores.csv", "r")
+                g = open("temp_egg_scores.csv", "r")
                 w = csv.writer(f)
                 for i in csv.reader(g):
                     w.writerow([user, i])
                 f.close()
                 g.close()
-                os.remove("./egg_catcher/temp_egg_scores.csv")
+                os.remove(".temp_egg_scores.csv")
 
             def play():
-                sp.run(["python", "./egg_catcher/egg_catcher.py"])
+                game.egg_catcher.run()
                 store_score()
 
             title = tk.Label(frame1, text="EGG CATCHER", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
