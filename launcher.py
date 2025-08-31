@@ -97,7 +97,7 @@ if __name__ == "__main__":
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame2, text="PLAY", command=play)
 
-            dino_open = Image.open(r"assets\launcher\dino_game3.png").resize((300, 200), Image.Resampling.LANCZOS)
+            dino_open = Image.open(r"assets\launcher\dino_game.png").resize((300, 200), Image.Resampling.LANCZOS)
             image_d = ImageTk.PhotoImage(dino_open)
             image_label = tk.Label(frame2, image=image_d, borderwidth=5, relief="sunken")
             image_label.image = image_d
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         egg_btn = tk.Button(side, image=egg_img, bg = "#61451A", borderwidth=5, command=egg_click)
         egg_btn.place(relx=0.035, rely=0.015, relwidth=0.4, relheight=0.4)
 
-        dino_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\dino2.png").resize((110, 120)))
+        dino_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\dino.png").resize((110, 120)))
         dino_btn = tk.Button(side, image=dino_img, bg = "#623456", borderwidth=5, command=dino_click)
         dino_btn.place(relx=0.56, rely=0.015, relwidth=0.4, relheight=0.4)
 
@@ -303,16 +303,19 @@ if __name__ == "__main__":
                     msb.showinfo("Successful", "Password successfully changed")
                     settings_win.destroy()
 
-                settings_2 = tk.Frame(settings_win, width=300, height=200, bg="#333333")
+                settings_2 = tk.Frame(settings_win, width=300, height=250, bg="#333333")
+                settings_win.geometry("300x250")
                 settings_2.pack_propagate(False)
                 settings_1.destroy()
                 settings_2.pack()
 
+                txt1 = tk.Label(settings_2, text=f"Password change for,", font = font.Font(family="Arial", size=7, slant='roman'), fg = "white", bg = "#333333").pack()
+                txt = tk.Label(settings_2, text=f"{user}", font = font.Font(family="Arial", size=7, slant="italic"), fg = "white", bg = "#333333").pack()
                 old_password = tk.Label(settings_2, text="Old Password", bg="#333333", fg="white")
                 old_p = tk.Entry(settings_2, show="*")
                 new_password = tk.Label(settings_2, text="New Password", bg="#333333", fg="white")
                 new_p = tk.Entry(settings_2, show="*")
-                ok_btn = tk.Button(settings_2, text="Confirm", command=validate)
+                ok_btn = tk.Button(settings_2, text="Confirm", command=validate, fg = "white", bg = "#333333")
 
                 for widget in (old_password, old_p, new_password, new_p, ok_btn):
                     widget.pack(pady=5)
@@ -327,8 +330,9 @@ if __name__ == "__main__":
                     settings_win.destroy()
 
             settings_1.pack()
-            tk.Button(settings_1, text="Change Password", command=changePassword).pack(pady=10)
-            tk.Button(settings_1, text="Log Out", command=exit_settings).pack(pady=10)
+            tk.Label(settings_1, text = "Settings", font = ("Arial", 30), fg = "white", bg = "#333333").pack(pady=5)
+            tk.Button(settings_1, text="Change Password", command=changePassword, fg = "white", bg = "#333333").pack(pady=10)
+            tk.Button(settings_1, text="Log Out", command=exit_settings, fg = "white", bg = "#333333").pack(pady=10)
 
             settings_win.mainloop()
         
@@ -416,12 +420,9 @@ if __name__ == "__main__":
         launcher.mainloop()
 
     #Initializing the Window
-    def win_init():
-        global window
-        window = tk.Tk()
-        window.geometry("300x250")
-        window.configure(bg = "#333333")
-        main()
+    window = tk.Tk()
+    window.geometry("300x250")
+    window.configure(bg = "#333333")
 
     def main():
         window.title("Exotic Games")
@@ -474,12 +475,12 @@ if __name__ == "__main__":
                         window.destroy()
                         launcher()                
                     else:
-                        incorrect = msb.showerror("Error", "Incorrect Password or Username")
+                        incorrect = msb.showerror("Error", "Incorrect password or username")
                         password_enter.delete(0, tk.END)
                         pass 
                 else:
                     msb.showerror("Error", "Username does not exist, please sign up")
-                    signup()
+                    back()
             else:
                 msb.showerror("Error", "Please enter valid credentials")     
                 
@@ -615,7 +616,7 @@ if __name__ == "__main__":
 
 
 
-    win_init()
+    main()
 
     window.mainloop()
 

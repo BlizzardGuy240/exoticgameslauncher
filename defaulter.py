@@ -1,5 +1,5 @@
 import pickle
 f = open("sensitive.dat", "wb")
-d = {"admin": "123123"}
+d = {"Admin": "123"}
 pickle.dump(d, f)
 f.close()
