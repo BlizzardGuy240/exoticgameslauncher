@@ -9,23 +9,27 @@ from tkinter import font
 from PIL import ImageTk, Image
 import pyglet
 
-from game.dino_game import run
-from game.egg_catcher import run
-from game.hangman import run
-from game.reaction_test import run
-
 try:
     with open("sensitive.dat", 'rb'):
         pass
 except FileNotFoundError:
     sp.run(['python', 'defaulter.py'])
 
-
 if __name__ == "__main__":
+    def delcurrentUser(event):
+        try:
+            os.remove("current_user.dat")
+            sys.exit()
+        except:
+            pass
+    
     def launcher():
+        with open("current_user.dat", "wb") as f:
+            pickle.dump(user, f)
         launcher = tk.Tk()
         launcher.title("Exotic Games Launcher")
         launcher.geometry("800x400")
+        launcher.resizable(False, False)
         launcher.configure(bg = "#321321")
 
         label = tk.Label(launcher, text = f"Welcome to Exotic Games, {user}", font = ("Comic Sans MS", 18), fg = "white", bg="#321321")
@@ -36,8 +40,8 @@ if __name__ == "__main__":
         # b.pack()
 
         my_title_font = font.Font(family="Comic Sans MS", size = 29)
-        my_font = font.Font(family="TT Rounds Neue Trial Condensed Regular", size=9)
-        my_font = pyglet.font.add_file("TT Rounds Neue Trial Condensed Regular.ttf")
+        my_font = font.Font(family=r"/assets/launcher/TT Rounds Neue Trial Condensed Regular", size=9)
+        my_font = pyglet.font.add_file(r"assets\launcher\TT Rounds Neue Trial Condensed Regular.ttf")
         def resize_font(event):
             new_size = max(9, int(event.width / 50))
             new_title_size = max(29, int(event.width / 50))
@@ -51,7 +55,7 @@ if __name__ == "__main__":
         main.place(relx=0.4375, y=35, relwidth=0.5625, relheight=1)
         main.pack_propagate(False)
 
-        filler=tk.Label(main, text='\n\n', bg="#3F5F68").pack()
+        filler = tk.Label(main, text='\n\n ', bg="#3F5F68").pack()
         text = tk.Label(main, text="Click on a game to get started...!", font=font.Font(family="Consolas 20 bold", size=50, slant='italic'), bg="#3F5F68", fg="#FFFFFF", wraplength=400)
         text.pack(expand=True, anchor='n')
 
@@ -61,28 +65,18 @@ if __name__ == "__main__":
             frame1.place(x=0, y=0, relwidth=1, relheight=1)
             frame1.pack_propagate(False)
 
-            def store_score():
-                f = open("./egg_catcher/egg_catcher_scores.csv", "a", newline='')
-                g = open("temp_egg_scores.csv", "r")
-                w = csv.writer(f)
-                for i in csv.reader(g):
-                    w.writerow([user, i])
-                f.close()
-                g.close()
-                os.remove(".temp_egg_scores.csv")
-
             def play():
-                game.egg_catcher.run()
-                store_score()
+                sp.run(['python', 'games\egg_catcher.py'])
 
             title = tk.Label(frame1, text="EGG CATCHER", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame1, text="""Eggs are falling from the sky! Can you catch them all? Showcase your determination to save them all while racking up unimaginable scores with the score multiplier in different difficulties. Press play to relieve stress!""",
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame1, text="PLAY", command=play)
 
-            image_open = Image.open("/assets/launcher/dino_game3.png")
-            image = ImageTk.PhotoImage(image_open)
-            image_label = tk.Label(frame1, image=image)
+            egg_open = Image.open(r"assets\launcher\egg_game.png").resize((300, 200), Image.Resampling.LANCZOS)
+            image_e = ImageTk.PhotoImage(egg_open)
+            image_label = tk.Label(frame1, image=image_e, borderwidth=5, relief="sunken")
+            image_label.image = image_e
 
             title.pack(expand=False, fill="both")
             text.pack(expand=False, fill="both")
@@ -95,38 +89,24 @@ if __name__ == "__main__":
             frame2.place(x=0, y=0, relwidth=1, relheight=1)
             frame2.pack_propagate(False)
 
-            def store_score():
-                f = open("./dino_game/dino_scores.csv", "a", newline='')
-                g = open("./dino_game/temp_dino_scores.csv", "r")
-                w = csv.writer(f)
-                for i in csv.reader(g):
-                    w.writerow([user, i])
-                f.close()
-                g.close()
-                os.remove("./dino_game/temp_dino_scores.csv")
-
             def play():
-                game.dino_game.run()
-                store_score()
+                sp.run(['python', 'games\dino_game.py'])
 
             title = tk.Label(frame2, text="DINO GAME", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame2, text="""Give your spacebar a test today by joining the competition to get the highest score in this endless runner game, called DINO. Press play to demonstrate your precise timing, and ambition!""",
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame2, text="PLAY", command=play)
 
-            image_open = Image.open("/assets/launcher/dino_game3.png")
-            image = ImageTk.PhotoImage(image_open)
-            image_label = tk.Label(frame2, image=image)
+            dino_open = Image.open(r"assets\launcher\dino_game3.png").resize((300, 200), Image.Resampling.LANCZOS)
+            image_d = ImageTk.PhotoImage(dino_open)
+            image_label = tk.Label(frame2, image=image_d, borderwidth=5, relief="sunken")
+            image_label.image = image_d
 
             title.pack(expand=False, fill="both")
             text.pack(expand=False, fill="both")
             image_label.pack(expand=False, fill="none")
             play_btn.pack(expand=False, pady=5, fill="none")           
-            
-            # title.place(relx=0, rely=0, relwidth=1, relheight=0.2)
-            # text.place(relx=0, rely=0.15, relwidth=1, relheight=0.24)
-            # play_btn.place(relx)
-            
+
         def hangman_click():
             global frame3
             frame3 = tk.Frame(main, bg="#3F5F68")
@@ -134,16 +114,17 @@ if __name__ == "__main__":
             frame3.pack_propagate(False)
 
             def play():
-                sp.run(["python", "./hangman/hangman.py"])
+                sp.run(['python', r'games\hangman.py'])
 
             title = tk.Label(frame3, text="HANGMAN", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame3, text="""The best productive game to test your vernacular and deductive skills with a simple GUI, and a not-so-simple library of words that range from easy to hard. Press play to destroy OR get destroyed!""",
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame3, text="PLAY", command=play)
 
-            image_open = Image.open("/assets/launcher/hangman_image.png")
-            image = ImageTk.PhotoImage(image_open.resize((300,200)))
-            image_label = tk.Label(frame3, image=image)
+            hang_open = Image.open(r"assets\launcher\hangman_image.png").resize((300, 200), Image.Resampling.LANCZOS)
+            image_h = ImageTk.PhotoImage(hang_open)
+            image_label = tk.Label(frame3, image=image_h, borderwidth=5, relief="sunken")
+            image_label.image = image_h
 
             title.pack(expand=False, fill="both")
             text.pack(expand=False, fill="both")
@@ -156,66 +137,291 @@ if __name__ == "__main__":
             frame4.place(x=0, y=0, relwidth=1, relheight=1)
             frame4.pack_propagate(False)
 
-            def store_score():
-                f = open("./reaction_test/reaction_test_scores.csv", "a", newline='')
-                g = open("./reaction_test/temp_reaction_scores_FINAL.csv", "r")
-                w = csv.writer(f)
-                for i in csv.reader(g):
-                    w.writerow([user, i])
-                f.close()
-                g.close()
-                os.remove("./reaction_test/temp_reaction_scores_FINAL.csv")
-
             def play():
-                sp.run(["python", "./reaction_test/reaction_test.py"])
-                store_score()
+                sp.run(['python', r'games\reaction_test.py'])
 
             title = tk.Label(frame4, text="REACTION TEST", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame4, text="""READY? SET! GO!! A fun game with the premise of being a lights-out reaction test for the player to train their speeds. Press play and let's see what you can do!""",
                             wraplength=400, font=my_font, bg="#3F5F68", fg="#FFFFFF")
             play_btn = tk.Button(frame4, text="PLAY", command=play)
 
-            image_open = Image.open("/assets/launcher/hangman_image.png")
-            image = ImageTk.PhotoImage(image_open.resize((300,200)))
-            image_label = tk.Label(frame4, image=image)
+            reaction_open = Image.open(r"assets\launcher\reaction_game.png").resize((300, 200), Image.Resampling.LANCZOS)
+            image_r = ImageTk.PhotoImage(reaction_open)
+            image_label = tk.Label(frame4, image=image_r, borderwidth=5, relief="sunken")
+            image_label.image = image_r
 
             title.pack(expand=False, fill="both")
             text.pack(expand=False, fill="both")
             image_label.pack(expand=False, fill="none")
             play_btn.pack(expand=False, pady=5, fill="none")
 
-        egg_img = ImageTk.PhotoImage(Image.open("/assets/launcher/egg_catcher.png").resize((110, 120)))
+        egg_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\egg_catcher.png").resize((110, 120)))
         egg_btn = tk.Button(side, image=egg_img, bg = "#61451A", borderwidth=5, command=egg_click)
         egg_btn.place(relx=0.035, rely=0.015, relwidth=0.4, relheight=0.4)
 
-        dino_img = ImageTk.PhotoImage(Image.open("/assets/launcher/dino2.png").resize((110, 120)))
+        dino_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\dino2.png").resize((110, 120)))
         dino_btn = tk.Button(side, image=dino_img, bg = "#623456", borderwidth=5, command=dino_click)
         dino_btn.place(relx=0.56, rely=0.015, relwidth=0.4, relheight=0.4)
 
-        han_img = ImageTk.PhotoImage(Image.open("/assets/launcher/hangman.png").resize((110, 120)))
+        han_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\hangman.png").resize((110, 120)))
         han_btn = tk.Button(side, image=han_img, bg = "#EFDECD", borderwidth=5, command=hangman_click)
         han_btn.place(relx=0.035, rely=0.48, relwidth=0.4, relheight=0.4)
 
-        reat_img = ImageTk.PhotoImage(Image.open("/assets/launcher/react.png").resize((110, 120)))
+        reat_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\react.png").resize((110, 120)))
         reat_btn = tk.Button(side, image=reat_img, bg = "#FFFF4D", borderwidth=5, command=reaction_click)
         reat_btn.place(relx=.56, rely=0.48, relwidth=0.4, relheight=0.4)
         
         def settings():
-            pass
-        
-        settings_img = ImageTk.PhotoImage(Image.open("/assets/launcher/settings.png"))
+            # settings = tk.Tk()
+            # settings.title("Settings")
+            # settings.geometry("300x200")
+            # settings.resizable(False, False)
 
-        settings = tk.Button(launcher, image=settings_img)
-        settings.place(relx=0.96, rely=0.0075)
+            # global settings_1
+            # settings_1 = tk.Frame(settings, width=300, height=200)
+            # settings_1.configure(bg = "#333333")
+            # settings_1.pack_propagate(False)
+
+            # def changePassword():
+                
+            #     def validPassword(entry):
+            #         count = 0
+            #         for char in r"!@#$%^&*()-_=+[]{}|;:'\",.<>?/\`~":
+            #             if char in entry.get():
+            #                 count += 1
+            #         if count >= 1:
+            #             return True
+            #         else:
+            #             return False
+
+            #     def validate():
+            #         with open("sensitive.dat", "rb") as f:
+            #             data = pickle.load(f)
+            #             if old_p.get() == '':
+            #                 if len(new_p.get()) >= 8:
+            #                     if validPassword(new_p):
+            #                         if data[user] == old_p.get():
+            #                             data[user] == new_p.get()
+            #                             msb.showinfo("Succesful", "Password successfully changed")
+            #                             settings.destroy()
+            #                         else:
+            #                             msb.showerror("Error", "Incorrect password")
+            #                             for i in (old_p, new_p):
+            #                                 i.delete(0, tk.END)
+            #                     else:
+            #                         msb.showwarning("Warning", "Password does not contain special character(s)")
+            #                         for i in (old_p, new_p):
+            #                             i.delete(0, tk.END)
+            #                 else:
+            #                     msb.showerror("Error", "New password must be greater than 8 characters")
+            #                     for i in (old_p, new_p):
+            #                         i.delete(0, tk.END)
+            #             else:
+            #                 msb.showerror("Error", "All entries are mandatory")
+                
+            #         with open("sensitive.dat", "wb") as g:
+            #             pickle.dump(data, g)
+
+            #     settings_2 = tk.Frame(settings, width=300, height=200)
+            #     settings_2.configure(bg = "#333333")
+            #     settings_2.pack_propagate(False)
+            #     settings_1.destroy()
+            #     settings_2.pack()
+            #     l = []
+            #     old_password = tk.Label(settings_2, text = "Old Password")
+            #     old_p = tk.Entry(settings_2)
+            #     new_password = tk.Label(settings_2, text = "New Password")
+            #     new_p = tk.Entry(settings_2)
+            #     ok_btn = tk.Button(settings_2, text = "Confirm", command = validate)
+            #     l.extend([old_password, old_p, new_password, new_p, ok_btn])
+                      
+            #     for i in l:
+            #         i.pack()
+            
+            # def exit():
+            #     ans = msb.askyesno("Logging Out", "Are you sure you want to exit?")
+            #     if ans:
+            #         delcurrentUser("event")
+            #         launcher.destroy()
+            #         settings.destroy()
+            #     else:
+            #         settings.destroy()
+            
+            # settings_1.pack()            
+            # change_pass = tk.Button(settings_1, text = "Change Password", command = changePassword).pack()
+            # logout_btn = tk.Button(settings_1, text = "Log Out", command = exit).pack()
+            
+            # settings.mainloop()
+        
+            settings_win = tk.Tk()
+            settings_win.title("Settings")
+            settings_win.geometry("300x200")
+            settings_win.resizable(False, False)
+
+            global settings_1
+            settings_1 = tk.Frame(settings_win, width=300, height=200, bg="#333333")
+            settings_1.pack_propagate(False)
+
+            def changePassword():
+                def validPassword(entry):
+                    specials = r"!@#$%^&*()-_=+[]{}|;:'\",.<>?/\`~"
+                    return any(char in specials for char in entry.get())
+
+                def validate():
+                    with open("sensitive.dat", "rb") as f:
+                        data = pickle.load(f)
+
+                    # Check all fields filled
+                    if not old_p.get() or not new_p.get():
+                        msb.showerror("Error", "All entries are mandatory")
+                        return
+
+                    # Check old password matches
+                    if data.get(user) != old_p.get():
+                        msb.showerror("Error", "Incorrect old password")
+                        old_p.delete(0, tk.END)
+                        new_p.delete(0, tk.END)
+                        return
+
+                    # Check new password length
+                    if len(new_p.get()) < 8:
+                        msb.showerror("Error", "New password must be at least 8 characters")
+                        new_p.delete(0, tk.END)
+                        return
+
+                    # Check special character
+                    if not validPassword(new_p):
+                        msb.showwarning("Warning", "Password must contain at least one special character")
+                        new_p.delete(0, tk.END)
+                        return
+
+                    # Update password
+                    data[user] = new_p.get()
+                    with open("sensitive.dat", "wb") as g:
+                        pickle.dump(data, g)
+
+                    msb.showinfo("Successful", "Password successfully changed")
+                    settings_win.destroy()
+
+                settings_2 = tk.Frame(settings_win, width=300, height=200, bg="#333333")
+                settings_2.pack_propagate(False)
+                settings_1.destroy()
+                settings_2.pack()
+
+                old_password = tk.Label(settings_2, text="Old Password", bg="#333333", fg="white")
+                old_p = tk.Entry(settings_2, show="*")
+                new_password = tk.Label(settings_2, text="New Password", bg="#333333", fg="white")
+                new_p = tk.Entry(settings_2, show="*")
+                ok_btn = tk.Button(settings_2, text="Confirm", command=validate)
+
+                for widget in (old_password, old_p, new_password, new_p, ok_btn):
+                    widget.pack(pady=5)
+
+            def exit_settings():
+                ans = msb.askyesno("Logging Out", "Are you sure you want to exit?")
+                if ans:
+                    delcurrentUser("event")
+                    launcher.destroy()
+                    settings_win.destroy()
+                else:
+                    settings_win.destroy()
+
+            settings_1.pack()
+            tk.Button(settings_1, text="Change Password", command=changePassword).pack(pady=10)
+            tk.Button(settings_1, text="Log Out", command=exit_settings).pack(pady=10)
+
+            settings_win.mainloop()
+        
+        settings_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\settings.png"))
+
+        settings = tk.Button(launcher, image=settings_img, command = settings)
+        settings.image = settings_img
+        settings.place(relx=0.959, y=2)
+
+
+        def highscores():
+            GAMES = {"Dino Game": "dino_scores", "Egg Catcher": "egg_scores", "Reaction Test": "reaction_test_scores"}
+
+            def show_scores(game_file, game_name):
+                file_path = os.path.join("data", game_file + ".csv")
+
+                if not os.path.exists(file_path):
+                    msb.showerror("No Data", f"No scores found for '{game_name}', please play the game to register scores")
+                    return
+
+                scores_by_user = {}
+
+                with open(file_path, newline="\r\n") as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        if len(row) == 2:
+                            username = row[0]
+                            if game_name != "Reaction Test":
+                                score = int(row[1])
+                            else:
+                                score = float(row[1])
+
+                            if username not in scores_by_user:
+                                scores_by_user[username] = []
+                            
+                            scores_by_user[username].append(score)
+
+                for user in scores_by_user:
+                    if game_name != "Reaction Test":
+                        scores_by_user[user].sort(reverse=True)
+                    else:
+                        scores_by_user[user].sort(reverse=False)
+
+                score_win = tk.Toplevel(root)
+                score_win.title(f"Scores - {game_name}")
+                score_win.geometry("350x400")
+                score_win.resizable(False, False)
+
+                tk.Label(score_win, text=f"All Scores - {game_name}", font=("Arial", 14, "bold")).pack(pady=10)
+
+                # Display scores grouped by user
+                for user in sorted(scores_by_user.keys()):
+                    tk.Label(score_win, text=user, font=("Arial", 12, "bold")).pack(anchor="w", padx=20, pady=(5, 0))
+                    for score in scores_by_user[user]:
+                        tk.Label(score_win, text=f"   {score}", font=("Arial", 11)).pack(anchor="w", padx=40)
+
+            root = tk.Tk()
+            root.title("Game Scores Viewer")
+            root.geometry("300x200")
+            root.resizable(False, False)
+
+            tk.Label(root, text="Select a game to view scores:", font=("Arial", 12, "bold")).pack(pady=10)
+
+            for game_name, game_file in GAMES.items():
+                btn = tk.Button(root, text=game_name, font=("Arial", 12),
+                                command=lambda f=game_file, n=game_name: show_scores(f, n))
+                btn.pack(pady=5, fill="x", padx=40)
+
+            root.mainloop()
+
+        high_img = ImageTk.PhotoImage(Image.open(r"assets\launcher\trophy.png"))
+
+        high_scores = tk.Button(launcher, image=high_img, command = highscores)
+        high_scores.image = high_img
+        high_scores.place(relx=0.915, y=2)
         
         launcher.bind("<Configure>", resize_font)
+
+        def on_close():
+            delcurrentUser("event")
+            launcher.destroy()
+
+        launcher.protocol("WM_DELETE_WINDOW", on_close)
 
         launcher.mainloop()
 
     #Initializing the Window
-    window = tk.Tk()
-    window.geometry("300x250")
-    window.configure(bg = "#333333")
+    def win_init():
+        global window
+        window = tk.Tk()
+        window.geometry("300x250")
+        window.configure(bg = "#333333")
+        main()
 
     def main():
         window.title("Exotic Games")
@@ -409,7 +615,7 @@ if __name__ == "__main__":
 
 
 
-    main()
+    win_init()
 
     window.mainloop()
 
