@@ -560,7 +560,7 @@ if __name__ == "__main__":
                 return False
         
         def createacc():
-            if correctLength():
+            if not correctLength():
                 return msb.showerror("Error", "Password & username must be greater than 8 characters")
             elif not validUsername():
                 return msb.showerror("Error", "Username must not contain special character(s)")
@@ -619,5 +619,6 @@ if __name__ == "__main__":
     main()
 
     window.mainloop()
+
 
 
