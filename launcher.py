@@ -66,7 +66,7 @@ if __name__ == "__main__":
             frame1.pack_propagate(False)
 
             def play():
-                sp.run(['python', 'games\egg_catcher.py'])
+                sp.run(['python', r'games\egg_catcher.py'])
 
             title = tk.Label(frame1, text="EGG CATCHER", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame1, text="""Eggs are falling from the sky! Can you catch them all? Showcase your determination to save them all while racking up unimaginable scores with the score multiplier in different difficulties. Press play to relieve stress!""",
@@ -90,7 +90,7 @@ if __name__ == "__main__":
             frame2.pack_propagate(False)
 
             def play():
-                sp.run(['python', 'games\dino_game.py'])
+                sp.run(['python', r'games\dino_game.py'])
 
             title = tk.Label(frame2, text="DINO GAME", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame2, text="""Give your spacebar a test today by joining the competition to get the highest score in this endless runner game, called DINO. Press play to demonstrate your precise timing, and ambition!""",
@@ -560,7 +560,7 @@ if __name__ == "__main__":
                 return False
         
         def createacc():
-            if not correctLength():
+            if correctLength():
                 return msb.showerror("Error", "Password & username must be greater than 8 characters")
             elif not validUsername():
                 return msb.showerror("Error", "Username must not contain special character(s)")
@@ -619,4 +619,5 @@ if __name__ == "__main__":
     main()
 
     window.mainloop()
+
 
