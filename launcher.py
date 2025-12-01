@@ -8,12 +8,30 @@ import subprocess as sp
 from tkinter import font
 from PIL import ImageTk, Image
 import pyglet
+import mysql.connector as sql
+
 
 try:
-    with open("sensitive.dat", 'rb'):
-        pass
+    with open("sensitive.dat", 'rb') as f:
+        PASSWORD = pickle.load(f)
 except FileNotFoundError:
     sp.run(['python', 'defaulter.py'])
+    with open("sensitive.dat", 'rb') as f:
+        PASSWORD = pickle.load(f)
+
+def database():
+    global PASSWORD
+    connection = sql.connect(host = 'localhost', user = 'root', password = PASSWORD)
+    mycur = connection.cursor()
+    mycur.execute("create database if not exists exoticgameslauncher")
+    mycur.execute("use exoticgameslauncher")
+    mycur.execute("create table if not exists credentials(Username varchar(255) not null unique key, Password varchar(255) not null)")
+    mycur.execute("insert ignore into credentials values('Admin', '123123')")
+    connection.commit()
+    connection.close()
+database()
+
+
 
 if __name__ == "__main__":
     def delcurrentUser(event):
@@ -66,7 +84,7 @@ if __name__ == "__main__":
             frame1.pack_propagate(False)
 
             def play():
-                sp.run(['python', r'games\egg_catcher.py'])
+                sp.run(['python', 'games\egg_catcher.py'])
 
             title = tk.Label(frame1, text="EGG CATCHER", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame1, text="""Eggs are falling from the sky! Can you catch them all? Showcase your determination to save them all while racking up unimaginable scores with the score multiplier in different difficulties. Press play to relieve stress!""",
@@ -90,7 +108,7 @@ if __name__ == "__main__":
             frame2.pack_propagate(False)
 
             def play():
-                sp.run(['python', r'games\dino_game.py'])
+                sp.run(['python', 'games\dino_game.py'])
 
             title = tk.Label(frame2, text="DINO GAME", font=my_title_font, bg="#3F5F68", fg="#FFFFFF")
             text = tk.Label(frame2, text="""Give your spacebar a test today by joining the competition to get the highest score in this endless runner game, called DINO. Press play to demonstrate your precise timing, and ambition!""",
@@ -255,11 +273,11 @@ if __name__ == "__main__":
         
             settings_win = tk.Tk()
             settings_win.title("Settings")
-            settings_win.geometry("300x200")
+            settings_win.geometry("300x220")
             settings_win.resizable(False, False)
 
             global settings_1
-            settings_1 = tk.Frame(settings_win, width=300, height=200, bg="#333333")
+            settings_1 = tk.Frame(settings_win, width=300, height=220, bg="#333333")
             settings_1.pack_propagate(False)
 
             def changePassword():
@@ -268,8 +286,12 @@ if __name__ == "__main__":
                     return any(char in specials for char in entry.get())
 
                 def validate():
-                    with open("sensitive.dat", "rb") as f:
-                        data = pickle.load(f)
+                    global PASSWORD
+                    mycon = sql.connect(host = 'localhost', user = 'root', password = PASSWORD, database = 'exoticgameslauncher')
+                    mycur = mycon.cursor()
+                    mycur.execute("select * from credentials")
+
+                    data = dict(mycur.fetchall())
 
                     # Check all fields filled
                     if not old_p.get() or not new_p.get():
@@ -296,9 +318,8 @@ if __name__ == "__main__":
                         return
 
                     # Update password
-                    data[user] = new_p.get()
-                    with open("sensitive.dat", "wb") as g:
-                        pickle.dump(data, g)
+                    mycur.execute(f"update credentials set Password = '{new_p.get()}' where Username = '{user}'")
+                    mycon.commit()
 
                     msb.showinfo("Successful", "Password successfully changed")
                     settings_win.destroy()
@@ -328,11 +349,20 @@ if __name__ == "__main__":
                     settings_win.destroy()
                 else:
                     settings_win.destroy()
+            
+            def changeSQLpassword():
+                ans = msb.askyesno("Confirm Change", "Are you sure you want to update your mySQL Password?")
+                if ans:
+                    sp.run(['python', 'defaulter.py'])
+                    settings_win.destroy()
+                else:
+                    settings_win.destroy()
 
             settings_1.pack()
             tk.Label(settings_1, text = "Settings", font = ("Arial", 30), fg = "white", bg = "#333333").pack(pady=5)
-            tk.Button(settings_1, text="Change Password", command=changePassword, fg = "white", bg = "#333333").pack(pady=10)
-            tk.Button(settings_1, text="Log Out", command=exit_settings, fg = "white", bg = "#333333").pack(pady=10)
+            tk.Button(settings_1, text="Change Password", command=changePassword, fg = "white", bg = "#333333").pack(pady=7)
+            tk.Button(settings_1, text="Change mySQL Password", command=changeSQLpassword, fg = "white", bg = "#333333").pack(pady=7)
+            tk.Button(settings_1, text="Log Out", command=exit_settings, fg = "white", bg = "#333333").pack(pady=7)
 
             settings_win.mainloop()
         
@@ -463,26 +493,32 @@ if __name__ == "__main__":
         frame2.pack_propagate(False)
         
         def validate():
+            global PASSWORD
             global user
             user = username_enter.get()
             passw = password_enter.get()
-            f = open("sensitive.dat", "rb")
-            data = pickle.load(f)
-            f.close()
+
+            mycon = sql.connect(host = 'localhost', user = 'root', password = PASSWORD, database = 'exoticgameslauncher')
+            mycur = mycon.cursor()
+            mycur.execute("select * from credentials")
+            data = dict(mycur.fetchall())
+
             if passw != "" and user != "":
                 if user in data:
                     if data[user] == passw:
                         window.destroy()
                         launcher()                
                     else:
-                        incorrect = msb.showerror("Error", "Incorrect password or username")
+                        msb.showerror("Error", "Incorrect password or username")
                         password_enter.delete(0, tk.END)
                         pass 
                 else:
                     msb.showerror("Error", "Username does not exist, please sign up")
                     back()
             else:
-                msb.showerror("Error", "Please enter valid credentials")     
+                msb.showerror("Error", "Please enter valid credentials")
+
+            mycon.close()    
                 
         def back():
             frame2.destroy()
@@ -560,6 +596,7 @@ if __name__ == "__main__":
                 return False
         
         def createacc():
+            global PASSWORD
             if not correctLength():
                 return msb.showerror("Error", "Password & username must be greater than 8 characters")
             elif not validUsername():
@@ -571,14 +608,16 @@ if __name__ == "__main__":
                     i.delete(0, tk.END)
                 return msb.showerror("Error", "Passwords entered do not match")
             else:
-            
-                with open("sensitive.dat", "rb") as f:
-                        data = pickle.load(f)
-                if user_entry.get() not in data:
+                mycon = sql.connect(host = 'localhost', user = 'root', password = PASSWORD, database = 'exoticgameslauncher')
+                mycur = mycon.cursor()
+                mycur.execute("select * from credentials")
+                data = dict(mycur.fetchall())
 
-                    g = open("sensitive.dat", "wb")
-                    data.update({user_entry.get(): pass_entry1.get()})
-                    pickle.dump(data, g)
+                if user_entry.get() not in data:
+                    
+                    mycur.execute(f"insert into credentials values('{user_entry.get()}', '{pass_entry1.get()}')")
+                    mycon.commit()
+                    mycon.close()
 
                     global msg
                     msg = msb.showinfo("Success!", "Account successfully created, please log in through our portal")
@@ -619,6 +658,4 @@ if __name__ == "__main__":
     main()
 
     window.mainloop()
-
-
 
